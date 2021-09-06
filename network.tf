@@ -1,18 +1,19 @@
 ##############################################################################
 # This module defines the VPC network
-# VPC, Subnets
+# VPC, Internet gateway, Subnets, Load Balancer
 ##############################################################################
 
 ##############################################################################
 # Create VPC 
 ##############################################################################
-data "ibm_resource_group" "all_rg" {
+data "ibm_resource_group" "rg" {
   name = var.resource_group_name
 }
 
 resource "ibm_is_vpc" "vpc" {
   name                      = var.vpc_name
-  resource_group            = data.ibm_resource_group.all_rg.id
+  resource_group            = data.ibm_resource_group.rg.id
+  resource_group            = var
   # address_prefix_management = "manual"
 }
 
@@ -51,4 +52,18 @@ resource "ibm_is_subnet" "backend_subnet" {
   name                      = "backend-subnet" 
   zone                      = "${var.ibm_region}-1"
   total_ipv4_address_count  = 16
+}
+
+##############################################################################
+# Create Load Balancer
+##############################################################################
+resource "ibm_is_lb" "load_balancer" {
+  name           = "load-balancer"
+  type           = "public"
+  subnets        = ibm_is_subnet.frontend_subnet.id
+  resource_group = data.ibm_resource_group.rg.id
+  timeouts {
+    create = "15m"
+    delete = "15m"
+  }
 }
