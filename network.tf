@@ -17,18 +17,35 @@ resource "ibm_is_vpc" "vpc" {
 }
 
 ##############################################################################
+# Create Public gateway for front-end subnet
+##############################################################################
+resource "ibm_is_public_gateway" "public_gateway" {
+  name  = "front-end-gateway"
+  vpc   = ibm_is_vpc.vpc.id
+  zone  = "${var.ibm_region}-1"
+  timeouts {
+    create = "90m"
+  }
+}
+
+##############################################################################
 # Create Subnets
 ##############################################################################
-
 resource "ibm_is_subnet" "management_subnet" {
   vpc             = ibm_is_vpc.vpc.id
+  name            = "management_subnet"
+  zone            = "${var.ibm_region}-1"
 }
 
 resource "ibm_is_subnet" "frontend_subnet" {
   vpc             = ibm_is_vpc.vpc.id
-  public_gateway = ibm_is_public_gateway.repo_gateway[count.index].id
+  name            = "frontend_subnet"
+  zone            = "${var.ibm_region}-1"
+  public_gateway  = ibm_is_public_gateway.public_gateway.id
 }
 
 resource "ibm_is_subnet" "backend_subnet" {
   vpc             = ibm_is_vpc.vpc.id
+  name            = "backend_subnet"
+  zone            = "${var.ibm_region}-1"
 }
