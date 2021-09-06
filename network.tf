@@ -82,6 +82,8 @@ resource "ibm_is_lb_pool" "back_end_pool" {
   depends_on         = [ ibm_is_lb.load_balancer ]
 }
 
+/* TODO: redirect listener http->https*/
+/* TODO: HTTPS listener instead of HTTP*/
 resource "ibm_is_lb_listener" "front_end_listener" {
   lb           = ibm_is_lb.load_balancer.id
   port         = "80"
@@ -91,7 +93,7 @@ resource "ibm_is_lb_listener" "front_end_listener" {
 }
 
 
-/* will attach servers to load balancer in the compute node... */
+/* TODO: will need to attach servers to the backend pool compute module... */
 /*
 resource "ibm_is_lb_pool_member" "webapptier-lb-pool-member-zone1" {
   count          = var.frontend_count
