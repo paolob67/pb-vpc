@@ -32,20 +32,23 @@ resource "ibm_is_public_gateway" "public_gateway" {
 # Create Subnets
 ##############################################################################
 resource "ibm_is_subnet" "management_subnet" {
-  vpc             = ibm_is_vpc.vpc.id
-  name            = "management-subnet"
-  zone            = "${var.ibm_region}-1"
+  vpc                       = ibm_is_vpc.vpc.id
+  name                      = "management-subnet"
+  zone                      = "${var.ibm_region}-1"
+  total_ipv4_address_count  = 32
 }
 
 resource "ibm_is_subnet" "frontend_subnet" {
-  vpc             = ibm_is_vpc.vpc.id
-  name            = "frontend-subnet"
-  zone            = "${var.ibm_region}-1"
-  public_gateway  = ibm_is_public_gateway.public_gateway.id
+  vpc                       = ibm_is_vpc.vpc.id
+  name                      = "frontend-subnet"
+  zone                      = "${var.ibm_region}-1"
+  total_ipv4_address_count  = 16
+  public_gateway            = ibm_is_public_gateway.public_gateway.id
 }
 
 resource "ibm_is_subnet" "backend_subnet" {
-  vpc             = ibm_is_vpc.vpc.id
-  name            = "backend-subnet"
-  zone            = "${var.ibm_region}-1"
+  vpc                       = ibm_is_vpc.vpc.id
+  name                      = "backend-subnet" 
+  zone                      = "${var.ibm_region}-1"
+  total_ipv4_address_count  = 16
 }
