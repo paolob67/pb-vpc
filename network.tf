@@ -59,7 +59,7 @@ resource "ibm_is_subnet" "backend_subnet" {
 resource "ibm_is_lb" "load_balancer" {
   name           = "load-balancer"
   type           = "public"
-  subnets        = ibm_is_subnet.frontend_subnet.id
+  subnets        = [ ibm_is_subnet.frontend_subnet.id ]
   resource_group = data.ibm_resource_group.rg.id
   timeouts {
     create = "15m"
