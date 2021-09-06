@@ -33,19 +33,19 @@ resource "ibm_is_public_gateway" "public_gateway" {
 ##############################################################################
 resource "ibm_is_subnet" "management_subnet" {
   vpc             = ibm_is_vpc.vpc.id
-  name            = "management_subnet"
+  name            = "management-subnet"
   zone            = "${var.ibm_region}-1"
 }
 
 resource "ibm_is_subnet" "frontend_subnet" {
   vpc             = ibm_is_vpc.vpc.id
-  name            = "frontend_subnet"
+  name            = "frontend-subnet"
   zone            = "${var.ibm_region}-1"
   public_gateway  = ibm_is_public_gateway.public_gateway.id
 }
 
 resource "ibm_is_subnet" "backend_subnet" {
   vpc             = ibm_is_vpc.vpc.id
-  name            = "backend_subnet"
+  name            = "backend-subnet"
   zone            = "${var.ibm_region}-1"
 }
