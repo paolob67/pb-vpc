@@ -6,7 +6,7 @@ data "ibm_resource_group" "all_rg" {
 }
 
 resource "ibm_is_vpc" "vpc" {
-  name                      = var.unique_id
+  name                      = var.vpc_name
   resource_group            = data.ibm_resource_group.all_rg.id
   # address_prefix_management = "manual"
 }
