@@ -82,8 +82,8 @@ resource "ibm_is_lb_pool" "back_end_pool" {
   depends_on         = [ ibm_is_lb.load_balancer ]
 }
 
-/* TODO: redirect listener http->https*/
-/* TODO: HTTPS listener instead of HTTP*/
+/* TODO: redirect listener http->https */
+/* TODO: HTTPS listener instead of HTTP */
 resource "ibm_is_lb_listener" "front_end_listener" {
   lb           = ibm_is_lb.load_balancer.id
   port         = "80"

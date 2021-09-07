@@ -20,6 +20,10 @@ variable "vpc_name" {
   default     = "pb-vpc"
 }
 
+# public key name for bastion host access 
+variable "ssh_key_name" {
+  description = "Public key name for VPC - VSI access to be used to coinnect to bastion"
+}
 
 ##############################################################################
 # Variables to set when running standalone
