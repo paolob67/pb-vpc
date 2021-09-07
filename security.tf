@@ -47,13 +47,13 @@ resource "ibm_is_security_group_rule" "frontend_allow_http" {
 # BackEnd
 # Allow 3306/TCP from frontend subnet
 ##############################################################################
-resource "ibm_is_security_group" "frontend_security_group" {
-  name = "frontend-security-group"
+resource "ibm_is_security_group" "backend_security_group" {
+  name = "backend-security-group"
   vpc   = ibm_is_vpc.vpc.id
 }
 
 # open SSH port for all incoming connections (could be restricetd to whitelist)
-resource "ibm_is_security_group_rule" "frontend_allow_http" {
+resource "ibm_is_security_group_rule" "backend_allow_mysql" {
   group     = ibm_is_security_group.bastion_security_group.id
   direction = "inbound"
   remote    = ibm_is_subnet.frontend_subnet.subnetipv4_cidr_block
