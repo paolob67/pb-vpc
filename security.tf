@@ -56,7 +56,7 @@ resource "ibm_is_security_group" "backend_security_group" {
 resource "ibm_is_security_group_rule" "backend_allow_mysql" {
   group     = ibm_is_security_group.bastion_security_group.id
   direction = "inbound"
-  remote    = ibm_is_subnet.frontend_subnet.subnetipv4_cidr_block
+  remote    = ibm_is_subnet.frontend_subnet.ipv4_cidr_block
   tcp {
     port_min = 3306
     port_max = 3306
