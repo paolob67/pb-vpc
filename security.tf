@@ -15,7 +15,7 @@ resource "ibm_is_security_group" "bastion_security_group" {
 
 # open SSH port for all incoming connections
 resource "ibm_is_security_group_rule" "bastion_allow_ssh" {
-  group     = ibm_is_security_group.bastion-security-group.id
+  group     = ibm_is_security_group.bastion_security_group.id
   direction = "inbound"
   remote    = "0.0.0.0/0"
   tcp {
