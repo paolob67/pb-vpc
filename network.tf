@@ -32,11 +32,11 @@ resource "ibm_is_public_gateway" "public_gateway" {
 ##############################################################################
 # Create Subnets
 ##############################################################################
-resource "ibm_is_subnet" "management_subnet" {
+resource "ibm_is_subnet" "bastion_subnet" {
   vpc                       = ibm_is_vpc.vpc.id
-  name                      = "management-subnet"
+  name                      = "bastion-subnet"
   zone                      = "${var.ibm_region}-1"
-  total_ipv4_address_count  = 32
+  total_ipv4_address_count  = 4
 }
 
 resource "ibm_is_subnet" "frontend_subnet" {

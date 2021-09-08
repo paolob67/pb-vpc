@@ -24,7 +24,7 @@ resource "ibm_is_instance" "bastion_host" {
   image             = data.ibm_is_image.bastion_host_image.id
   profile           = "cx2-2x4"
   primary_network_interface {
-    subnet          = ibm_is_subnet.management_subnet.id
+    subnet          = ibm_is_subnet.bastion_subnet.id
     security_groups = [ ibm_is_security_group.bastion_security_group.id ]
   }
   timeouts {
