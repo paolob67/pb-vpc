@@ -36,14 +36,14 @@ resource "ibm_is_subnet" "bastion_subnet" {
   vpc                       = ibm_is_vpc.vpc.id
   name                      = "bastion-subnet"
   zone                      = "${var.ibm_region}-1"
-  total_ipv4_address_count  = 4
+  total_ipv4_address_count  = 8
 }
 
 resource "ibm_is_subnet" "frontend_subnet" {
   vpc                       = ibm_is_vpc.vpc.id
   name                      = "frontend-subnet"
   zone                      = "${var.ibm_region}-1"
-  total_ipv4_address_count  = 16
+  total_ipv4_address_count  = 32
   public_gateway            = ibm_is_public_gateway.public_gateway.id
 }
 
@@ -51,7 +51,7 @@ resource "ibm_is_subnet" "backend_subnet" {
   vpc                       = ibm_is_vpc.vpc.id
   name                      = "backend-subnet" 
   zone                      = "${var.ibm_region}-1"
-  total_ipv4_address_count  = 16
+  total_ipv4_address_count  = 32
 }
 
 ##############################################################################
