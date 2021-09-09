@@ -76,7 +76,7 @@ resource "ibm_is_instance_group" "frontend_group" {
   subnets            = [ibm_is_subnet.frontend_subnet.id]
   application_port   = "8080"
   load_balancer      = ibm_is_lb.load_balancer.id
-  load_balancer_pool = ibm_is_lb_pool.back_end_pool.id
+  load_balancer_pool = ibm_is_lb_pool.back_end_pool
   timeouts {
     create           = "15m"
     delete           = "15m"
