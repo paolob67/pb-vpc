@@ -77,7 +77,14 @@ resource "ibm_is_instance_group" "frontend_group" {
   application_port   = "8080"
   load_balancer      = ibm_is_lb.load_balancer.id
   load_balancer_pool = element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
-  # load_balancer_pool = ibm_is_lb_pool.back_end_pool.id
+  # FOX FIX
+  #  - load_balancer_pool = ibm_is_lb_pool.back_end_pool.id
+  #  + load_balancer_pool = element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
+  # the above statement produces
+  #   load_balancer_pool = "r010-58eacd58-64a9-4d27-8e7e-5216580c072f/r010-191a65c1-5904-45d8-9fee-6f630b496f8b"
+  # while element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
+  # will produce
+  #   load_balancer_pool = "r010-191a65c1-5904-45d8-9fee-6f630b496f8b"
   timeouts {
     create           = "15m"
     delete           = "15m"
