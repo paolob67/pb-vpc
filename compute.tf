@@ -48,11 +48,17 @@ resource "ibm_is_floating_ip" "bastion_floating_ip" {
 #  - r010-3bef996a-0dd4-48cc-b857-fd03e8dfa0db   
 #    (ibm-centos-8-3-minimal-amd64-3 centos-8-amd64)
 ##############################################################################
+# Retrieve image id for centos-8-amd64
+data "ibm_is_image" "frontend_host_image" {
+  name = "ibm-centos-8-3-minimal-amd64-3"
+}
+
 # Define instance template
 resource "ibm_is_instance_template" "frontend_template" {
-  name    = "frontend-template"
-  image   = data.ibm_is_image.bastion_host_image.id
-  profile = "bx2-2x8"
+  name              = "frontend-template"
+  vpc               = ibm_is_vpc.vpc.id
+  image             = data.ibm_is_image.frontend_host_image.id
+  profile           = "bx2-2x8"
   primary_network_interface {
     subnet          = ibm_is_subnet.frontend_subnet.id
     security_groups = [ ibm_is_security_group.frontend_security_group.id ]
