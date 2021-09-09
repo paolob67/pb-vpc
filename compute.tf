@@ -82,4 +82,5 @@ resource "ibm_is_instance_group" "frontend_group" {
     delete           = "15m"
     update           = "10m"
   }
+  depends_on         = [ ibm_is_lb.load_balancer, ibm_is_lb_pool.back_end_pool ]
 }
