@@ -63,10 +63,6 @@ resource "ibm_is_instance_template" "frontend_template" {
     subnet          = ibm_is_subnet.frontend_subnet.id
     security_groups = [ ibm_is_security_group.frontend_security_group.id ]
   }
-  timeouts {
-    create          = "10m"
-    delete          = "10m"
-  }
   zone              = "${var.ibm_region}-1"
   resource_group    = data.ibm_resource_group.rg.id
   keys              = [ data.ibm_is_ssh_key.ssh_key.id ]
