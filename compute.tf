@@ -93,7 +93,7 @@ resource "ibm_is_instance_group_manager" "frontend_group_manager" {
   cooldown             = 120
   manager_type         = "autoscale"
   enable_manager       = true
-  min_memebrship_count = 1
+  min_membership_count = 1
   max_membership_count = 2
 }
 
