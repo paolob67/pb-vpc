@@ -72,11 +72,12 @@ resource "ibm_is_instance_template" "frontend_template" {
 resource "ibm_is_instance_group" "frontend_group" {
   name               = "frontend-group"
   instance_template  = ibm_is_instance_template.frontend_template.id
-  instance_count     = 2
+  instance_count     = 1
   subnets            = [ibm_is_subnet.frontend_subnet.id]
   application_port   = "8080"
   load_balancer      = ibm_is_lb.load_balancer.id
-  load_balancer_pool = ibm_is_lb_pool.back_end_pool
+  load_balancer_pool = element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
+  # load_balancer_pool = ibm_is_lb_pool.back_end_pool.id
   timeouts {
     create           = "15m"
     delete           = "15m"
