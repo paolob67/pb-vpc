@@ -81,18 +81,6 @@ resource "ibm_is_lb_pool" "back_end_pool" {
   health_monitor_url = "/"
   depends_on         = [ ibm_is_lb.load_balancer ]
 }
-resource "ibm_is_lb_pool" "lb-pool" {
-  lb                 = ibm_is_lb.lb.id
-  name               = "${var.vpc_name}-lb-pool"
-  protocol           = var.enable_end_to_end_encryption ? "https" : "http"
-  algorithm          = "round_robin"
-  health_delay       = "15"
-  health_retries     = "2"
-  health_timeout     = "5"
-  health_type        = var.enable_end_to_end_encryption ? "https" : "http"
-  health_monitor_url = "/"
-  depends_on = [time_sleep.wait_30_seconds]
-}
 
 /* TODO: redirect listener http->https */
 /* TODO: HTTPS listener instead of HTTP */
