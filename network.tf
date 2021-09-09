@@ -74,12 +74,24 @@ resource "ibm_is_lb_pool" "back_end_pool" {
   name               = "back-end-pool"
   protocol           = "http"
   algorithm          = "round_robin"
-  health_delay       = "5"
+  health_delay       = "15"
   health_retries     = "2"
-  health_timeout     = "2"
+  health_timeout     = "5"
   health_type        = "http"
   health_monitor_url = "/"
   depends_on         = [ ibm_is_lb.load_balancer ]
+}
+resource "ibm_is_lb_pool" "lb-pool" {
+  lb                 = ibm_is_lb.lb.id
+  name               = "${var.vpc_name}-lb-pool"
+  protocol           = var.enable_end_to_end_encryption ? "https" : "http"
+  algorithm          = "round_robin"
+  health_delay       = "15"
+  health_retries     = "2"
+  health_timeout     = "5"
+  health_type        = var.enable_end_to_end_encryption ? "https" : "http"
+  health_monitor_url = "/"
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 /* TODO: redirect listener http->https */
@@ -88,12 +100,13 @@ resource "ibm_is_lb_listener" "front_end_listener" {
   lb           = ibm_is_lb.load_balancer.id
   port         = "80"
   protocol     = "http"
-  default_pool = ibm_is_lb_pool.back_end_pool.id
+  default_pool = element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
   depends_on   = [ ibm_is_lb_pool.back_end_pool ]
 }
 
 
-/* TODO: will need to attach servers to the backend pool compute module... */
+/* TODO: will need to attach servers to the backend pool compute module... 
+         if not using resource groups */
 /*
 resource "ibm_is_lb_pool_member" "webapptier-lb-pool-member-zone1" {
   count          = var.frontend_count

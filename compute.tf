@@ -74,17 +74,9 @@ resource "ibm_is_instance_group" "frontend_group" {
   instance_template  = ibm_is_instance_template.frontend_template.id
   instance_count     = 1
   subnets            = [ibm_is_subnet.frontend_subnet.id]
-  application_port   = "8080"
+  application_port   = 8080
   load_balancer      = ibm_is_lb.load_balancer.id
   load_balancer_pool = element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
-  # FOX FIX
-  #  - load_balancer_pool = ibm_is_lb_pool.back_end_pool.id
-  #  + load_balancer_pool = element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
-  # the above statement produces
-  #   load_balancer_pool = "r010-58eacd58-64a9-4d27-8e7e-5216580c072f/r010-191a65c1-5904-45d8-9fee-6f630b496f8b"
-  # while element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
-  # will produce
-  #   load_balancer_pool = "r010-191a65c1-5904-45d8-9fee-6f630b496f8b"
   timeouts {
     create           = "15m"
     delete           = "15m"
@@ -92,3 +84,34 @@ resource "ibm_is_instance_group" "frontend_group" {
   }
   depends_on         = [ ibm_is_lb.load_balancer, ibm_is_lb_pool.back_end_pool ]
 }
+
+# Define scaling strategy to max 2 servers
+resource "ibm_is_instance_group_manager" "frontend_group_manager" {
+  name                 = "frontend-group-manager"
+  aggregation_window   = 90
+  instance_group       = ibm_is_instance_group.frontend_group.id
+  cooldown             = 120
+  manager_type         = "autoscale"
+  enable_manager       = true
+  max_membership_count = 2
+}
+
+# Define a scaling policy based on CPU usage
+resource "ibm_is_instance_group_manager_policy" "frontend_cpu_policy" {
+  name                   = "frontend-cpu-policy"
+  instance_group         = ibm_is_instance_group.frontend_group.id
+  instance_group_manager = ibm_is_instance_group_manager.frontend_group_manager.manager_id
+  metric_type            = "cpu"
+  metric_value           = 10
+  policy_type            = "target"
+}
+
+# NOTE: FOX FIX
+# https://github.com/IBM-Cloud/vpc-tutorials/blob/master/vpc-autoscale/main.tf
+#  - load_balancer_pool = ibm_is_lb_pool.back_end_pool.id
+#  + load_balancer_pool = element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
+# the above statement produces
+#   load_balancer_pool = "r010-58eacd58-64a9-4d27-8e7e-5216580c072f/r010-191a65c1-5904-45d8-9fee-6f630b496f8b"
+# while element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
+# will produce
+#   load_balancer_pool = "r010-191a65c1-5904-45d8-9fee-6f630b496f8b"
