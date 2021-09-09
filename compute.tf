@@ -67,3 +67,18 @@ resource "ibm_is_instance_template" "frontend_template" {
   resource_group    = data.ibm_resource_group.rg.id
   keys              = [ data.ibm_is_ssh_key.ssh_key.id ]
 }
+
+# Define instance group
+resource "ibm_is_instance_group" "frontend_group" {
+  name              = "frontend-group"
+  instance_template = ibm_is_instance_template.frontend_template.id
+  instance_count    = 2
+  subnets           = [ibm_is_subnet.frontend_subnet.id]
+  load_balancer     = ibm_is_lb.load_balancer.id
+  application_port  = "8080"
+  timeouts {
+    create          = "15m"
+    delete          = "15m"
+    update          = "10m"
+  }
+}
