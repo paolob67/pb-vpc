@@ -2,7 +2,7 @@
 # Terraform Providers
 ##############################################################################
 
-Uncomment this block when using with Terraform v 0.13 or higher
+# Uncomment this block when using with Terraform v 0.13 or higher
 terraform {
   required_providers {
     ibm = {
