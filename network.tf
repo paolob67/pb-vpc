@@ -69,9 +69,9 @@ resource "ibm_is_lb" "load_balancer" {
   depends_on     = [ ibm_is_subnet.frontend_subnet ]
 }
 
-resource "ibm_is_lb_pool" "back_end_pool" {
+resource "ibm_is_lb_pool" "loadbalancer_backend_pool" {
   lb                 = ibm_is_lb.load_balancer.id
-  name               = "back-end-pool"
+  name               = "loadbalancer-backend-pool"
   protocol           = "http"
   algorithm          = "round_robin"
   health_delay       = "15"
@@ -84,12 +84,12 @@ resource "ibm_is_lb_pool" "back_end_pool" {
 
 /* TODO: redirect listener http->https */
 /* TODO: HTTPS listener instead of HTTP */
-resource "ibm_is_lb_listener" "front_end_listener" {
+resource "ibm_is_lb_listener" "loadbalancer_frontend_listener" {
   lb           = ibm_is_lb.load_balancer.id
   port         = "80"
   protocol     = "http"
-  default_pool = element(split("/", ibm_is_lb_pool.back_end_pool.id), 1)
-  depends_on   = [ ibm_is_lb_pool.back_end_pool ]
+  default_pool = element(split("/", ibm_is_lb_pool.loadbalancer_backend_pool.id), 1)
+  depends_on   = [ ibm_is_lb_pool.loadbalancer_backend_pool ]
 }
 
 
