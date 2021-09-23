@@ -1,0 +1,19 @@
+#cloud-config
+
+# Run commands
+# Install security updates on Centos from IBM Cloud private mirror (no public access)
+# Install http server
+# Change listening port fot http to 8080
+# Update server firewall
+# Enable service start upon reboot
+# Start http server
+
+runcmd:
+  - [ yum, --security, update ]
+  - [ yum, install, httpd, -y ]
+  - [ sed, -i, "s/80/8080/g", /etc/httpd/conf/httpd.conf ]
+  - [ systemctl, enable, httpd.service ]
+  - [ systemctl, start, httpd.service ]
+  - [ firewall-offline-cmd, --add-port, 8080/tcp ]
+  - [ systemctl, stop, firewalld ]
+  - [ systemctl, start, firewalld ]
