@@ -19,9 +19,7 @@ runcmd:
   - [ systemctl, enable, httpd.service ]
   - [ systemctl, start, httpd.service ]
 
-write_files:
-  - path: /var/www/html/info.php
-    content: |
-         <?php
-          phpinfo(); 
-         ?>
+write-files:
+- path: /var/www/html/info.php
+  content: <?php phpinfo(); ?>
+  permissions: '0604'
